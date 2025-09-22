@@ -1,42 +1,55 @@
 package lock;
 
 public class KeyLock implements Lock {
-	private int key;
+	private final int key;
 	private boolean isLocked;
 	private boolean isInserted;
 	
 	public KeyLock(int key) {
-		// TODO Auto-generated method stub
+		this.key = key;
+		this.isLocked = true;   // start locked
+		this.isInserted = false;
 	}
 	
+// try to insert a key. returns true if it matches and wasn't already inserted.	
 	public boolean insertKey(int key) {
-		return false;	
+		if (isInserted) return false;	
+		if (this.key != key) return false;
+		isInserted = true;
+		return true;
 	}
 	
+// remove key if present	
 	public boolean removeKey() {
-		return false;
+		if (!isInserted) return false;
+		isInserted = false;
+		return true;
 	}
-	
+
+// turn the key to toggle lock state. key must be inserted
 	public boolean turn() {
-		return false;
+		if (!isInserted) return false;
+		isLocked = !isLocked;
+		return true;
 	}
+
 
 	@Override
 	public boolean lock() {
-		// TODO Auto-generated method stub
-		return false;
+		isLocked = true;
+		return true;
 	}
 
+	
 	@Override
 	public boolean unlock() {
-		// TODO Auto-generated method stub
-		return false;
+		isLocked = false;
+		return true;
 	}
 
 	@Override
 	public boolean isLocked() {
-		// TODO Auto-generated method stub
-		return false;
+		return isLocked;
 	}
 
 }
