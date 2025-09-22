@@ -62,34 +62,59 @@ public class ComboLock implements Lock{
 	
 // turn left 'ticks' steps (increasing numbers on a dial). Returns true if this lands on the expected number.	
 	public boolean turnLeft(int ticks) {
+		if (ticks < 0) return false;
+		isReset = false;
+		lastDir = Dir.LEFT;
+		position = mod(position + ticks, MAX_NUMBER + 1);
+		
+// expected middle step is LEFT
+		if (attemptIndex == 1 && position == combination[1]) {
+			attempt[attemptIndex++] = position;
+		}
 		return false;
 	}
 	
 	
 	public void reset() {
+		position = 0;
+		attemptIndex = 0;
+		isReset = true;
+		lastDir = Dir.NONE;
+		isLocked = true;
 	}
 	
 	public boolean isReset() {
-		return false;
+		return isReset;
 	}
 	
 
 	@Override
 	public boolean lock() {
-		// TODO Auto-generated method stub
-		return false;
+		isLocked = true;
+		// Don't clear the combo; just require the user to dial again
+		return true;
 	}
 
 	@Override
 	public boolean unlock() {
-		// TODO Auto-generated method stub
-		return false;
+		// Unlock occurs when all 3 numbers have been landed upon in the correct directions.
+		// Here we simply report whether we've reached that state
+		return !isLocked;
 	}
 
 	@Override
 	public boolean isLocked() {
-		// TODO Auto-generated method stub
-		return false;
+		return isLocked;
+	}
+
+// Utilities
+	private static int mod(int a, int m) {
+		int x = a % m;
+		return (x < 0) ? x + m : x;
+	}
+// Helper to see the generated combo while testing
+	public int[] getCombinationForTesting() {
+		return combination.clone();
 	}
 
 }
