@@ -22,5 +22,9 @@ public class Test2
 		
 		return test1;
 	}
-
+	/*
+public boolean visible() {
+	this.method2();
+	return true;
+} */
 }
